@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Train Scheduler</title>
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
     <!-- JAVASCRIPT -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -13,8 +13,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div class="jumbotron text-light bg-info">
-        <h1 class="display-4 text-center">Train Scheduler</h1>
+    <div class="container-fluid">
+        <div class="jumbotron bg-info">
+            <h1 class="display-4 text-lg-center text-light">Train Scheduler</h1>
+        </div>
     </div>
     <div class="container">
         <div class="row-fluid">
@@ -38,7 +40,7 @@
             </div>
             <div id="inputCard" class="card border border-info">
                 <div class="card-header text-light font-weight-bold bg-info">Add Train</div>
-                <div class="card-body">
+                <div class="card-block">
                     <form>
                         <div class="form-group">
                             <label for="trainName">Train Name</label>
