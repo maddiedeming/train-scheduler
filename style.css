@@ -1,0 +1,15 @@
+body{
+    background-image:url(https://orig00.deviantart.net/f4a4/f/2013/258/1/c/gif___sunset_train_by_turst67-d6mdbgy.gif);
+    background-size:cover;
+    background-repeat:no-repeat;
+}
+.bg-primary{
+    background-color:#f3969a!important;
+}
+.border-primary{
+    border-color:#f3969a!important;
+}
+#inputCard{
+    margin-bottom:2rem;
+    margin-top:2rem;
+}
