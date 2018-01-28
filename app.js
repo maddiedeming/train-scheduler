@@ -29,10 +29,10 @@ function initApp(){
     firebase.auth().getRedirectResult().then(function(result){
     if (result.credential){
         var token = result.credential.accessToken;
-       //$("#quickstart-oauthtoken").textContent = token;
+        $("#quickstart-oauthtoken").textContent = token;
     } 
     else{
-        //$("#quickstart-oauthtoken").textContent = null;
+        $("#quickstart-oauthtoken").textContent = null;
     }
     var user = result.user;
     }).catch(function(error){
@@ -56,23 +56,23 @@ function initApp(){
             var isAnonymous = user.isAnonymous;
             var uid = user.uid;
             var providerData = user.providerData;
-            //$("#quickstart-sign-in-status").textContent = "Signed in";
-            //$("#login").textContent = "Sign out";
-            //$("#quickstart-account-details").textContent = JSON.stringify(user, null, "  ");
+            $("#quickstart-sign-in-status").textContent = "Signed in";
+            $("#login").textContent = "Sign out";
+            $("#quickstart-account-details").textContent = JSON.stringify(user, null, "  ");
         } 
         else{
-            //$("#quickstart-sign-in-status").textContent = "Signed out";
-            //$("#login").textContent = "Sign in with GitHub";
-            //$("#quickstart-account-details").textContent = null;
-            //$("#quickstart-oauthtoken").textContent = null;
+            $("#quickstart-sign-in-status").textContent = "Signed out";
+            $("#login").textContent = "Sign in with GitHub";
+            $("#quickstart-account-details").textContent = null;
+            $("#quickstart-oauthtoken").textContent = null;
         }
         $("#login").disabled = false;
     });
-  //  $("#login").addEventListener('click', toggleSignIn, false);
     document.getElementById("login").addEventListener('click', toggleSignIn, false);
 }
 
 window.onload = function(){
+    $("#loginCredentials").hide();
     initApp();
 };
 
