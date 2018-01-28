@@ -23,6 +23,15 @@
     </div>
     <div class="container">
         <div class="row-fluid">
+            <div id="loginCredentials" class="text-lg-center">
+                <button disabled class="btn btn-primary" id="quickstart-sign-in">Sign in with GitHub</button>
+                <div class="quickstart-user-details-container">Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
+                    <div>Firebase auth <code>currentUser</code> object value:</div>
+                    <pre><code id="quickstart-account-details">null</code></pre>
+                    <div>GitHub OAuth Access Token:</div>
+                    <pre><code id="quickstart-oauthtoken">null</code></pre>
+                </div>
+            </div>
             <div class="card border border-primary">
                 <div class="card-header text-light font-weight-bold bg-primary">Current Train Schedule</div>
                 <div class="card-body">
