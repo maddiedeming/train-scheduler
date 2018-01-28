@@ -16,15 +16,15 @@
   <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="jumbotron bg-primary" style="border-radius:0;">
+            <div class="jumbotron bg-primary text-lg-center" style="border-radius:0;">
                 <h1 class="display-4 text-lg-center text-light">Train Scheduler</h1>
+                <button disabled class="btn btn-info" id="login">Sign in with GitHub</button>
             </div>
         </div>
     </div>
     <div class="container">
         <div class="row-fluid">
             <div id="loginCredentials" class="text-lg-center">
-                <button disabled class="btn btn-primary" id="login">Sign in with GitHub</button>
                 <div class="quickstart-user-details-container">Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
                     <div>Firebase auth <code>currentUser</code> object value:</div>
                     <pre><code id="quickstart-account-details">null</code></pre>
@@ -38,11 +38,11 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Train Name</th>
-                                <th scope="col">Destination</th>
-                                <th scope="col">Frequency (Min)</th>
-                                <th scope="col">Next Arrival</th>
-                                <th scope="col">Minutes Away</th>
+                                <th>Train Name</th>
+                                <th>Destination</th>
+                                <th>Frequency (Min)</th>
+                                <th>Next Arrival</th>
+                                <th>Minutes Away</th>
                             </tr>
                         </thead>
                         <tbody id="trainTable">
