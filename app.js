@@ -22,7 +22,7 @@ function toggleSignIn(){
     else{
         firebase.auth().signOut();
     }
-    $("#login").disabled = true;
+    //$("#login").disabled = true;
 }
 
 function initApp(){
@@ -66,7 +66,7 @@ function initApp(){
             $("#quickstart-account-details").textContent = null;
             $("#quickstart-oauthtoken").textContent = null;
         }
-        $("#login").disabled = false;
+        //$("#login").disabled = false;
     });
     document.getElementById("login").addEventListener('click', toggleSignIn, false);
 }
