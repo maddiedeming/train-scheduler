@@ -12,10 +12,8 @@ var config = {
 };
 firebase.initializeApp(config);
 var database = firebase.database();
-
 var provider = new firebase.auth.GithubAuthProvider();
 firebase.auth().signInWithRedirect(provider);
-
 firebase.auth().getRedirectResult().then(function(result) {
     if (result.credential) {
       var token = result.credential.accessToken;
