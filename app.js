@@ -9,7 +9,7 @@ var config = {
     projectId: "trainscheduler-1bfe3",
     storageBucket: "",
     messagingSenderId: "372011317998"
-};
+  };
 firebase.initializeApp(config);
 var database = firebase.database();
 var provider = new firebase.auth.GithubAuthProvider();
