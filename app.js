@@ -1,8 +1,6 @@
-
 var _minutesAway;
 var _nextArrival = "";
-
-$("#trainTable").empty();
+var ip = "";
 //Firebase
 var config = {
     apiKey: "AIzaSyDnAUlx9qlnBAf17mXq0NmW9UFvwFnJqV0",
@@ -46,7 +44,13 @@ $("#add").on("click", function(event){
         destination: _destination,
         frequency: _frequency,
         nextArrival: _nextArrival,
-        minutesAway: _minutesAway       
+        minutesAway: _minutesAway,
+        userDetails: {
+            //createUser: ,
+            createTimestamp: Math.floor(Date.now()),
+            updateUser: null,
+            updateTimestamp: null              
+        }        
     }
     database.ref().push(train);
 });
@@ -59,9 +63,14 @@ database.ref().on("child_added", function(snapshot){
         '<td>' + snapshot.val().destination + '</td>' +
         '<td>' + snapshot.val().frequency + '</td>' +
         '<td>' + snapshot.val().nextArrival + '</td>' +
-        '<td>' + snapshot.val().minutesAway + '</td>');
+        '<td>' + snapshot.val().minutesAway + '</td>' +
+        '<td>' + '<button type="button" class="btn btn-link"><i class="fa fa-trash-o"></i></button>' + '</td>');
     tableRow.append(tableColumn);
     trainTable.append(tableRow);
   }, function(errorObject) {
         console.log("The read failed: " + errorObject.code);
   });
+
+$("td").on("blur", function(event){
+console.log("test")
+});
