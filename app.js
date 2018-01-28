@@ -70,6 +70,8 @@ function initApp(){
     });
   //  $("#login").addEventListener('click', toggleSignIn, false);
     Document.getElementById("login").addEventListener('click', toggleSignIn, false);
+}
+
 window.onload = function(){
     initApp();
 };
