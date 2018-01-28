@@ -68,8 +68,8 @@ function initApp(){
         }
         $("#login").disabled = false;
     });
-    $("#login").addEventListener('click', toggleSignIn, false);
-}
+  //  $("#login").addEventListener('click', toggleSignIn, false);
+    Document.getElementById("login").addEventListener('click', toggleSignIn, false);
 window.onload = function(){
     initApp();
 };
