@@ -132,6 +132,6 @@ database.ref().on("child_added", function(snapshot){
         console.log("The read failed: " + errorObject.code);
   });
 
-$("td").on("blur", function(event){
-console.log("test")
-});
+// $("td").on("blur", function(event){
+// console.log("test")
+// });
