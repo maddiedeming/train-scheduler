@@ -1,5 +1,3 @@
-var _minutesAway;
-var _nextArrival = "";
 //Firebase
 var config = {
     apiKey: "AIzaSyDnAUlx9qlnBAf17mXq0NmW9UFvwFnJqV0",
@@ -11,8 +9,8 @@ var config = {
   };
 firebase.initializeApp(config);
 var database = firebase.database();
-
-function toggleSignIn(){
+//Firebase Auth
+function toggleLogin(){
     if (!firebase.auth().currentUser){
       var provider = new firebase.auth.GithubAuthProvider();
       provider.addScope('repo');
@@ -22,12 +20,10 @@ function toggleSignIn(){
       firebase.auth().signOut();
     }
     $("#login").attr("disabled","disabled");
-  }
-  function initApp(){
+}
+//Firebase Auth
+function initApp(){
     firebase.auth().getRedirectResult().then(function(result){
-    if (result.credential){
-        var token = result.credential.accessToken;
-      }
         var user = result.user;
     }).catch(function(error) {
         var errorCode = error.code;
@@ -43,8 +39,6 @@ function toggleSignIn(){
     });
     firebase.auth().onAuthStateChanged(function(user) {
     if (user){
-        var email = user.email;
-        var photoURL = user.photoURL;
         $("#login").text("Sign out");
         $("#main").show();
     } 
@@ -54,55 +48,14 @@ function toggleSignIn(){
     }
         $("#login").removeAttr("disabled");
     });
-    document.getElementById('login').addEventListener('click', toggleSignIn, false);
-    }
-window.onload = function(){
-    initApp();
-    $("#main").hide();
-};
-
-function calculateTimes(frequency,minutes){
-    _firstTrain = moment().startOf('day').minute(minutes); 
-    var number = moment().diff(moment(_firstTrain), "minutes");
-    
-    if(number < 0){
-        number = number * -1;    
-        var currentTime = parseInt(((moment().get('hour')) * 60) + (moment().get('minutes')));
-        var trainTime = parseInt(((_firstTrain.get('hour')) * 60) + (_firstTrain.get('minutes')));
-        _minutesAway = trainTime - currentTime
-        _nextArrival = _firstTrain.format("h:mm a");
-    }
-    else{
-        _minutesAway = parseInt(frequency - (number % frequency));
-        _nextArrival = moment().add(_minutesAway, 'minutes').format("h:mm a");
-    }
+    document.getElementById('login').addEventListener('click', toggleLogin, false);
 }
-
-$("#add").on("click", function(event){
-    event.preventDefault();
-    var _trainName = $("#trainName").val().trim();
-    var _destination = $("#destination").val().trim();
-    var _firstTrain = $("#firstTrainTime").val().trim();
-    var _firstTrainMinutes = parseInt((_firstTrain.charAt(0) + _firstTrain.charAt(1)) * 60) + parseInt(_firstTrain.charAt(3) + _firstTrain.charAt(4));
-    var _frequency = $("#frequency").val().trim();
-    $("input").val("");
-    calculateTimes(_frequency,_firstTrainMinutes);
-    var train = {
-        trainName: _trainName,
-        destination: _destination,
-        frequency: _frequency,
-        nextArrival: _nextArrival,
-        minutesAway: _minutesAway,
-        userDetails: {
-            createUser: firebase.auth().currentUser.email,
-            createTimestamp: moment().format(),
-            updateUser: null,
-            updateTimestamp: null              
-        }        
-    }
-    database.ref().push(train);
-});
-
+//On Page Load
+window.onload = function(){
+    $("#main").hide();
+    initApp();
+};
+//Firebase Database Listener
 database.ref().on("child_added", function(snapshot){
     var trainTable = $("#trainTable");
     var tableRow = $("<tr>");
@@ -118,6 +71,45 @@ database.ref().on("child_added", function(snapshot){
   }, function(errorObject) {
         console.log("The read failed: " + errorObject.code);
   });
+//Add a Train Button Click Event
+$("#add").on("click", function(event){
+    event.preventDefault();
+    var _trainName = $("#trainName").val().trim();
+    var _destination = $("#destination").val().trim();
+    var _firstTrain = $("#firstTrainTime").val().trim();
+    var _firstTrainMinutes = parseInt((_firstTrain.charAt(0) + _firstTrain.charAt(1)) * 60) + parseInt(_firstTrain.charAt(3) + _firstTrain.charAt(4));
+    var _frequency = $("#frequency").val().trim();
+    $("input").val("");
+    _firstTrain = moment().startOf("day").minute(_firstTrainMinutes); 
+    var number = moment().diff(moment(_firstTrain), "minutes");
+    var _minutesAway;
+    var _nextArrival;
+    if(number < 0){
+        number = number * -1;    
+        var currentTime = parseInt(((moment().get("hour")) * 60) + (moment().get('minutes')));
+        var trainTime = parseInt(((_firstTrain.get('hour')) * 60) + (_firstTrain.get('minutes')));
+        _minutesAway = trainTime - currentTime
+        _nextArrival = _firstTrain.format("h:mm a");
+    }
+    else{
+        _minutesAway = parseInt(_frequency - (number % _frequency));
+        _nextArrival = moment().add(_minutesAway, 'minutes').format("h:mm a");
+    }
+    var train = {
+        trainName: _trainName,
+        destination: _destination,
+        frequency: _frequency,
+        nextArrival: _nextArrival,
+        minutesAway: _minutesAway,
+        userDetails: {
+            createUser: firebase.auth().currentUser.email,
+            createTimestamp: moment().format(),
+            updateUser: null,
+            updateTimestamp: null              
+        }        
+    }
+    database.ref().push(train);
+});
 
 // $("td").on("blur", function(event){
 // console.log("test")
