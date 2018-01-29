@@ -94,7 +94,7 @@ $("#add").on("click", function(event){
         nextArrival: _nextArrival,
         minutesAway: _minutesAway,
         userDetails: {
-            createUser: firebase.auth().currentUser,
+            createUser: firebase.auth().currentUser.email,
             createTimestamp: moment().format(),
             updateUser: null,
             updateTimestamp: null              
