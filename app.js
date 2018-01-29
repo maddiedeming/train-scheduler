@@ -96,13 +96,14 @@ $("#add").on("click", function(event){
         nextArrival: _nextArrival,
         minutesAway: _minutesAway,
         userDetails: {
-            createUser: email,
+            //createUser: email,
             createTimestamp: moment().format(),
             updateUser: null,
             updateTimestamp: null              
         }        
     }
     database.ref().push(train);
+    console.log(localStorage.getItem('firebase:authUser:' + config.apiKey + ':[DEFAULT]'));
 });
 
 database.ref().on("child_added", function(snapshot){
