@@ -1,6 +1,7 @@
 var _minutesAway;
 var _nextArrival = "";
-var ip = "";
+var email = "";
+var photoURL = "";
 //Firebase
 var config = {
     apiKey: "AIzaSyDnAUlx9qlnBAf17mXq0NmW9UFvwFnJqV0",
@@ -44,13 +45,8 @@ function toggleSignIn(){
     });
     firebase.auth().onAuthStateChanged(function(user) {
     if (user){
-        var displayName = user.displayName;
-        var email = user.email;
-        var emailVerified = user.emailVerified;
-        var photoURL = user.photoURL;
-        var isAnonymous = user.isAnonymous;
-        var uid = user.uid;
-        var providerData = user.providerData;
+        email = user.email;
+        photoURL = user.photoURL;
         $("#login").text = 'Sign out';
         $("#main").show();
     } 
