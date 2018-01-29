@@ -1,7 +1,5 @@
 var _minutesAway;
 var _nextArrival = "";
-var email = "";
-var photoURL = "";
 //Firebase
 var config = {
     apiKey: "AIzaSyDnAUlx9qlnBAf17mXq0NmW9UFvwFnJqV0",
@@ -45,8 +43,8 @@ function toggleSignIn(){
     });
     firebase.auth().onAuthStateChanged(function(user) {
     if (user){
-        email = user.email;
-        photoURL = user.photoURL;
+        var email = user.email;
+        var photoURL = user.photoURL;
         $("#login").text = 'Sign out';
         $("#main").show();
     } 
@@ -96,14 +94,13 @@ $("#add").on("click", function(event){
         nextArrival: _nextArrival,
         minutesAway: _minutesAway,
         userDetails: {
-            //createUser: email,
+            createUser: firebase.auth().currentUser,
             createTimestamp: moment().format(),
             updateUser: null,
             updateTimestamp: null              
         }        
     }
     database.ref().push(train);
-    console.log(localStorage.getItem('firebase:authUser:' + config.apiKey + ':[DEFAULT]'));
 });
 
 database.ref().on("child_added", function(snapshot){
