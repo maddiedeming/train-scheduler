@@ -21,9 +21,9 @@ function toggleSignIn() {
     } else {
       firebase.auth().signOut();
     }
-    document.getElementById('quickstart-sign-in').disabled = true;
+    document.getElementById('login').disabled = true;
   }
-  function initApp() {
+  function initApp(){
     firebase.auth().getRedirectResult().then(function(result) {
       if (result.credential) {
         var token = result.credential.accessToken;
@@ -53,17 +53,17 @@ function toggleSignIn() {
         var uid = user.uid;
         var providerData = user.providerData;
         document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-        document.getElementById('quickstart-sign-in').textContent = 'Sign out';
+        document.getElementById('login').textContent = 'Sign out';
         document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
       } else {
         document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-        document.getElementById('quickstart-sign-in').textContent = 'Sign in with GitHub';
+        document.getElementById('login').textContent = 'Sign in with GitHub';
         document.getElementById('quickstart-account-details').textContent = 'null';
         document.getElementById('quickstart-oauthtoken').textContent = 'null';
       }
-      document.getElementById('quickstart-sign-in').disabled = false;
+      document.getElementById('login').disabled = false;
     });
-    document.getElementById('quickstart-sign-in').addEventListener('click', toggleSignIn, false);
+    document.getElementById('login').addEventListener('click', toggleSignIn, false);
   }
   window.onload = function() {
     $("#loginCredentials").hide();
