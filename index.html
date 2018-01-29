@@ -27,12 +27,12 @@
             <div class="card border border-primary">
                 <div class="card-header text-light font-weight-bold bg-primary">Current Train Schedule</div>
                 <div class="card-body">
-                    <table class="table">
+                    <table id="table" class="table">
                         <thead>
                             <tr>
                                 <th>Train Name</th>
                                 <th>Destination</th>
-                                <th>Frequency (Min)</th>
+                                <th>Frequency</th>
                                 <th>Next Arrival</th>
                                 <th>Minutes Away</th>
                             </tr>
@@ -48,19 +48,19 @@
                     <form>
                         <div class="form-group">
                             <label for="trainName">Train Name</label>
-                            <input type="text" class="form-control" id="trainName" placeholder="Trenton Express">
+                            <input required type="text" class="form-control" id="trainName" placeholder="Trenton Express">
                         </div>
                         <div class="form-group">
                             <label for="destination">Destination</label>
-                            <input type="text" class="form-control" id="destination" placeholder="Trenton">
+                            <input required type="text" class="form-control" id="destination" placeholder="Trenton">
                         </div>
                         <div class="form-group">
                             <label for="firstTrainTime">First Train Time</label>
-                            <input type="time" class="form-control" id="firstTrainTime" placeholder="HH:mm">
+                            <input required type="time" value="00:00" class="form-control" id="firstTrainTime">
                         </div>
                         <div class="form-group">
                             <label for="frequency">Frequency</label>
-                            <input type="number" max="60" class="form-control" id="frequency" placeholder="mm">
+                            <input required type="number" max="1440" class="form-control" id="frequency" placeholder="In Minutes">
                         </div>
                         <button id="add" type="submit" class="btn btn-primary">Submit</button>
                     </form>
