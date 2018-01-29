@@ -13,38 +13,37 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-function toggleSignIn() {
-    if (!firebase.auth().currentUser) {
+function toggleSignIn(){
+    if (!firebase.auth().currentUser){
       var provider = new firebase.auth.GithubAuthProvider();
       provider.addScope('repo');
       firebase.auth().signInWithRedirect(provider);
-    } else {
+    } 
+    else{
       firebase.auth().signOut();
     }
-    document.getElementById('login').disabled = true;
+    $("#login").attr("disabled","disabled");
   }
   function initApp(){
-    firebase.auth().getRedirectResult().then(function(result) {
-      if (result.credential) {
+    firebase.auth().getRedirectResult().then(function(result){
+    if (result.credential){
         var token = result.credential.accessToken;
-        document.getElementById('quickstart-oauthtoken').textContent = token;
-      } else {
-        document.getElementById('quickstart-oauthtoken').textContent = 'null';
       }
-      var user = result.user;
+        var user = result.user;
     }).catch(function(error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      var email = error.email;
-      var credential = error.credential;
-      if (errorCode === 'auth/account-exists-with-different-credential') {
-        alert('You have already signed up with a different auth provider for that email.');
-      } else {
-        console.error(error);
-      }
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        var email = error.email;
+        var credential = error.credential;
+        if (errorCode === "auth/account-exists-with-different-credential"){
+            alert("You have already signed up with a different auth provider for that email.");
+        } 
+        else{
+            console.error(error);
+        }
     });
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
+    if (user){
         var displayName = user.displayName;
         var email = user.email;
         var emailVerified = user.emailVerified;
@@ -52,23 +51,21 @@ function toggleSignIn() {
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
         var providerData = user.providerData;
-        document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
-        document.getElementById('login').textContent = 'Sign out';
-        document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
-      } else {
-        document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
-        document.getElementById('login').textContent = 'Sign in with GitHub';
-        document.getElementById('quickstart-account-details').textContent = 'null';
-        document.getElementById('quickstart-oauthtoken').textContent = 'null';
-      }
-      document.getElementById('login').disabled = false;
+        $("#login").text = 'Sign out';
+        $("#main").show();
+    } 
+    else{
+        $("#login").text = 'Sign in with GitHub';
+        $("#main").hide();
+    }
+        $("#login").removeAttr("disabled");
     });
     document.getElementById('login').addEventListener('click', toggleSignIn, false);
-  }
-  window.onload = function() {
-    $("#loginCredentials").hide();
+    }
+window.onload = function(){
     initApp();
-  };
+    $("#main").hide();
+};
 
 function calculateTimes(frequency,minutes){
     _firstTrain = moment().startOf('day').minute(minutes); 
@@ -103,8 +100,8 @@ $("#add").on("click", function(event){
         nextArrival: _nextArrival,
         minutesAway: _minutesAway,
         userDetails: {
-            //createUser: ,
-            createTimestamp: Math.floor(Date.now()),
+            createUser: email,
+            createTimestamp: moment().format(),
             updateUser: null,
             updateTimestamp: null              
         }        
