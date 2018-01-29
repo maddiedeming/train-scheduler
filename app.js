@@ -45,11 +45,11 @@ function toggleSignIn(){
     if (user){
         var email = user.email;
         var photoURL = user.photoURL;
-        $("#login").text = 'Sign out';
+        $("#login").text("Sign out");
         $("#main").show();
     } 
     else{
-        $("#login").text = 'Sign in with GitHub';
+        $("#login").text("Sign in with GitHub");
         $("#main").hide();
     }
         $("#login").removeAttr("disabled");
