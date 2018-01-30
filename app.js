@@ -50,18 +50,13 @@ function initApp(){
     });
     document.getElementById('login').addEventListener('click', toggleLogin, false);
 }
-//On Page Load
-window.onload = function(){
-    $("#main").hide();
-    initApp();
-};
 //Firebase Database Listener
-database.ref().on("child_added", function(snapshot){
+database.ref().orderByKey().on("child_added", function(snapshot){
     var trainTable = $("#trainTable");
     var tableRow = $("<tr>");
     tableRow.attr("id",snapshot.child().ref.parent.key);
     tableRow.attr("data-value",snapshot.child().ref.parent.key);
-    var tableColumn = 
+    var tableColumns = 
         $('<td><p value="' + snapshot.val().trainName + '" data-value="' + snapshot.val().trainName + '">' + snapshot.val().trainName + '</p></td>' +
         '<td><p value="' + snapshot.val().destination + '" data-value="' + snapshot.val().destination + '">' + snapshot.val().destination + '</p></td>' +
         '<td><p value="' + snapshot.val().frequency + '" data-value="' + snapshot.val().frequency + '">' + snapshot.val().frequency + '</p></td>' +
@@ -72,7 +67,7 @@ database.ref().on("child_added", function(snapshot){
         '<button type="button" onclick="editTrain(this)" class="btn btn-link delete-train"><i class="fa fa-trash-o"></i></button>' + 
         '<button type="submit" onclick="editTrain(this)" class="btn btn-link update-train edit-row"><i class="fa fa-check"></i></button>' +
         '<button type="button" onclick="editTrain(this)" class="btn btn-link cancel-train edit-row"><i class="fa fa-ban"></i></button>' + '</td>');
-    tableRow.append(tableColumn);
+    tableRow.append(tableColumns);
     trainTable.append(tableRow);
     $(".update-train").hide();
     $(".cancel-train").hide();
@@ -80,12 +75,12 @@ database.ref().on("child_added", function(snapshot){
         console.log("The read failed: " + errorObject.code);
   });
 
-  database.ref().on("child_changed", function(snapshot){
-    $("#" + snapshot.child().ref.parent.key).empty();
+  database.ref().orderByKey().on("child_changed", function(snapshot){
     var trainTable = $("#trainTable");
-    var tableRow = $("<tr>");
     var tableRow = $("#" + snapshot.child().ref.parent.key);
-    var tableColumn = 
+    
+    tableRow.empty();
+    var tableColumns = 
         $('<td><p value="' + snapshot.val().trainName + '" data-value="' + snapshot.val().trainName + '">' + snapshot.val().trainName + '</p></td>' +
         '<td><p value="' + snapshot.val().destination + '" data-value="' + snapshot.val().destination + '">' + snapshot.val().destination + '</p></td>' +
         '<td><p value="' + snapshot.val().frequency + '" data-value="' + snapshot.val().frequency + '">' + snapshot.val().frequency + '</p></td>' +
@@ -96,14 +91,12 @@ database.ref().on("child_added", function(snapshot){
         '<button type="button" onclick="editTrain(this)" class="btn btn-link delete-train"><i class="fa fa-trash-o"></i></button>' + 
         '<button type="submit" onclick="editTrain(this)" class="btn btn-link update-train edit-row"><i class="fa fa-check"></i></button>' +
         '<button type="button" onclick="editTrain(this)" class="btn btn-link cancel-train edit-row"><i class="fa fa-ban"></i></button>' + '</td>');
-    tableRow.append(tableColumn);
-    trainTable.append(tableRow);
+    tableRow.append(tableColumns);
     $(".update-train").hide();
     $(".cancel-train").hide();
   }, function(errorObject) {
         console.log("The read failed: " + errorObject.code);
   });
-
 //Add a Train Button Click Event
 $("#add").on("click", function(event){
     event.preventDefault();
@@ -136,9 +129,7 @@ $("#add").on("click", function(event){
         var _nextArrival;
         if(number < 0){
             number = number * -1;    
-            var currentTime = parseInt(((moment().get("hour")) * 60) + (moment().get('minutes')));
-            var trainTime = parseInt(((_firstTrain.get('hour')) * 60) + (_firstTrain.get('minutes')));
-            _minutesAway = trainTime - currentTime
+            _minutesAway = firstTrain.diff(moment(),"minutes");
             _nextArrival = _firstTrain.format("h:mm a");
         }
         else{
@@ -153,7 +144,7 @@ $("#add").on("click", function(event){
             minutesAway: _minutesAway,
             userDetails: {
                 createUser: firebase.auth().currentUser.email,
-                createTimestamp: moment().format(),
+                createTimestamp: firebase.database.ServerValue.TIMESTAMP,
                 updateUser: null,
                 updateTimestamp: null              
             }        
@@ -201,6 +192,8 @@ function editTrain(button){
                     row.children[i].children[0].type = "time";
                     row.children[i].children[0].value = resetTime.format('HH:mm');
                 }
+                var cellHeight = $(button.parentElement.parentElement.lastChild.previousSibling.firstChild).height();
+                $(".form-control").height(cellHeight);
             }
         }
         else if($(button).hasClass("delete-train")){
@@ -234,7 +227,7 @@ function editTrain(button){
                     ['/' + rowKey + '/nextArrival']: firstTrain.format('hh:mm a'),
                     ['/' + rowKey + '/minutesAway']: updateMinutesAway,
                     ['/' + rowKey + '/userDetails/updateUser']: firebase.auth().currentUser.email,
-                    ['/' + rowKey + '/userDetails/updateTimestamp']: moment().format()   
+                    ['/' + rowKey + '/userDetails/updateTimestamp']: firebase.database.ServerValue.TIMESTAMP 
                     }).then(function(result){
                             for(var i = 0; i < 5; i++){
                         $(row.children[0].children[0]).data("value",$(row.children[0].children[0]).val());
@@ -272,3 +265,71 @@ function editTrain(button){
         $(row.children[3].children[0]).css("border-color","none");
     }
 }
+function refreshPage(){
+    $('#trainTable').find('tr').each(function(i, el){
+        var row = this;
+        $(row).removeClass("table-warning");
+        $(row).removeClass("table-danger");
+        if (row.childNodes[0].firstChild.nodeName === "P"){
+        var rowKey = row.id;
+        var time = $(row.childNodes[3]).text();
+        var freq = $(row.childNodes[2]).text();
+        var firstTrain = moment(time,'hh:mm a');
+        var updateMinutesAway;
+        console.log($(row.childNodes[4]).text())
+        if($(row.childNodes[4]).text() < 5){
+            if($(row.childNodes[4]).text() == 0){
+                $(row).addClass("table-danger");
+                $(row).removeClass("table-warning");
+            }
+            else{
+                $(row).addClass("table-warning");
+                $(row).removeClass("table-danger");
+            }
+        }
+        if(moment().isSameOrBefore(firstTrain)){
+            updateMinutesAway = firstTrain.diff(moment(),"minutes");
+        }
+        else{
+            updateMinutesAway = firstTrain.diff(moment(),"minutes");
+            if(updateMinutesAway === 0){
+
+            }
+            else{
+                updateMinutesAway = 0;
+                while(moment().isAfter(firstTrain)){
+                    firstTrain = moment(firstTrain).add(freq, "minutes");   
+                }
+                updateMinutesAway = firstTrain.diff(moment(),"minutes");
+            }
+        }
+        if($(row.childNodes[4]).text() != updateMinutesAway){
+            database.ref().update({
+                ['/' + rowKey + '/nextArrival']: firstTrain.format('hh:mm a'),
+                ['/' + rowKey + '/minutesAway']: updateMinutesAway,
+                ['/' + rowKey + '/userDetails/updateUser']: firebase.auth().currentUser.email,
+                ['/' + rowKey + '/userDetails/updateTimestamp']: firebase.database.ServerValue.TIMESTAMP 
+            }).then(function(result){
+                for(var i = 0; i < 5; i++){
+                    $(row.children[2].children[0]).data("value",$(row.children[2].children[0]).val());
+                    $(row.children[3].children[0]).data("value",$(row.children[3].children[0]).val());
+                    $(row.children[4].children[0]).data("value",$(row.children[4].children[0]).val());
+                }
+            }).catch(function(error){
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                var email = error.email;
+                var credential = error.credential;
+            });   
+        }
+       }  
+    })
+}
+//On Page Load
+window.onload = function(){
+    $("#main").hide();
+    initApp();
+    setInterval(function() {
+        refreshPage();
+    }, 1000);
+};
