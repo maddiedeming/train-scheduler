@@ -72,7 +72,7 @@ database.ref().orderByKey().on("child_added", function(snapshot){
     $(".update-train").hide();
     $(".cancel-train").hide();
   }, function(errorObject) {
-        console.log("The read failed: " + errorObject.code);
+        //console.log("The read failed: " + errorObject.code);
   });
 
   database.ref().orderByKey().on("child_changed", function(snapshot){
@@ -95,7 +95,7 @@ database.ref().orderByKey().on("child_added", function(snapshot){
     $(".update-train").hide();
     $(".cancel-train").hide();
   }, function(errorObject) {
-        console.log("The read failed: " + errorObject.code);
+        //console.log("The read failed: " + errorObject.code);
   });
 //Add a Train Button Click Event
 $("#add").on("click", function(event){
@@ -276,7 +276,6 @@ function refreshPage(){
         var freq = $(row.childNodes[2]).text();
         var firstTrain = moment(time,'hh:mm a');
         var updateMinutesAway;
-        console.log($(row.childNodes[4]).text())
         if($(row.childNodes[4]).text() < 5){
             if($(row.childNodes[4]).text() == 0){
                 $(row).addClass("table-danger");
